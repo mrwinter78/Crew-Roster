@@ -337,7 +337,273 @@
   }
   .search-input:focus { border-color: var(--accent-flight); }
 
-  .day-group { margin-bottom: 20px; animation: fadeUp 0.4s ease both; }
+
+
+  /* ── TURNO COLLAPSIBLE BLOCK ── */
+  .turno-block {
+    margin-bottom: 20px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(59,130,246,0.22);
+    box-shadow: 0 2px 10px rgba(59,130,246,0.07);
+  }
+  .turno-block-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 10px 14px 10px;
+    background: rgba(59,130,246,0.07);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    position: relative;
+  }
+  .turno-block-header:active { background: rgba(59,130,246,0.13); }
+  .turno-block-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 8px; font-weight: 800;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    color: #60A5FA; flex-shrink: 0;
+  }
+  .turno-block-dates {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 800;
+    color: #E2E8F0;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 6px;
+    padding: 2px 7px;
+    white-space: nowrap;
+  }
+  .turno-block-route {
+    display: flex; align-items: center; flex-wrap: nowrap;
+    gap: 0; flex: 1; min-width: 0; overflow: hidden;
+  }
+
+  /* ── Two-row turno header layout ── */
+  .tba-top-row {
+    display: flex; align-items: center; gap: 8px; width: 100%;
+  }
+  .tba-bottom-row {
+    width: 100%; margin-top: 6px;
+  }
+  .tba-route-rows {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .tba-route-row {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .tba-row-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 8px; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #93C5FD;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 4px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+    min-width: 26px; text-align: center;
+  }
+  .tba-row-label-dh {
+    color: #9CA3AF;
+    background: rgba(156,163,175,0.12);
+    border-color: rgba(156,163,175,0.22);
+  }
+  .tba-row-label-office {
+    color: #A78BFA;
+    background: rgba(167,139,250,0.12);
+    border-color: rgba(167,139,250,0.22);
+  }
+  .tba-route-seq {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 0;
+  }
+  .tba-iata {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 800;
+    color: var(--text-primary); white-space: nowrap;
+  }
+  .tba-iata.dh { color: #9CA3AF; }
+  .tba-sep {
+    font-size: 11px; color: #60A5FA; opacity: 0.5; padding: 0 2px; flex-shrink: 0;
+  }
+  .tba-sep.dh { color: #9CA3AF; }
+  .turno-block-pills {
+    display: flex; gap: 5px; flex-shrink: 0; align-items: center;
+  }
+  .tba-pill {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 3px 8px; border-radius: 7px;
+    background: rgba(59,130,246,0.10);
+    border: 1px solid rgba(59,130,246,0.18);
+  }
+  .tba-pill-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 800; color: #93C5FD; line-height: 1.15;
+  }
+  .tba-pill-lbl {
+    font-family: 'Inter', sans-serif; font-size: 7px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase; color: #60A5FA; opacity: 0.75;
+  }
+  .turno-block-chevron {
+    color: #60A5FA; flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+  .turno-block.expanded .turno-block-chevron { transform: rotate(180deg); }
+  .turno-block-body {
+    display: none;
+    background: transparent;
+    border-top: 1px solid rgba(59,130,246,0.12);
+    padding: 0 10px;
+  }
+  .turno-block.expanded .turno-block-body { display: block; }
+  .turno-block-body > .day-group {
+    margin-bottom: 0;
+    animation: none;
+    padding: 6px 0 0;
+  }
+  .turno-block-body > .day-group:first-child { padding-top: 10px; }
+  .turno-block-body > .day-group:last-child { padding-bottom: 10px; }
+  /* inside turno block, day-label not sticky */
+  .turno-block-body .day-label { position: static; }
+
+  /* Day-group inside a turno block: remove turno connector lines */
+  .turno-block-body .turno-wrap::before { display: none; }
+
+  /* Keep normal day-group style for standalone days */
+  .day-group { margin-bottom: 20px; animation: fadeUp 0.4s ease both; flex-direction: row; align-items: flex-start; gap: 10px; }
+  /* Standalone day-groups (not inside turno) get same lateral padding as turno body */
+  #timeline > .day-group { padding: 0 10px; }
+
+  /* ── IATA TOAST IN HEADER ── */
+  #iataToast {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 5px;
+    padding: 5px 11px;
+    border-radius: 8px;
+    background: rgba(96,165,250,0.13);
+    border: 1px solid rgba(96,165,250,0.28);
+    animation: iataFadeIn 0.15s ease;
+    /* match width of the three stat-pills row */
+    align-self: flex-start;
+    width: fit-content;
+  }
+  @keyframes iataFadeIn { from { opacity:0; transform:translateY(-3px); } to { opacity:1; transform:none; } }
+  #iataToastCode {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 800;
+    color: var(--text-primary);
+  }
+  #iataToastTz {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 700;
+    color: #60A5FA;
+  }
+  #iataToastTime {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 600;
+    color: var(--text-secondary);
+  }
+  @media (prefers-color-scheme: dark) {
+    .turno-block { border-color: rgba(59,130,246,0.28); }
+    .turno-block-header { background: rgba(59,130,246,0.09); }
+    .turno-block-body { border-top-color: rgba(59,130,246,0.18); }
+    #iataToast { background: rgba(96,165,250,0.10); border-color: rgba(96,165,250,0.22); }
+  }
+  @media (max-width: 600px) {
+    .tba-iata { font-size: 10px; }
+    .tba-pill-val { font-size: 10px; }
+    .turno-block-dates { font-size: 10px; }
+  }
+
+  /* ── TURNO SUMMARY BANNER ── */
+  .turno-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(59,130,246,0.07);
+    border: 1px solid rgba(59,130,246,0.20);
+  }
+  .turno-banner-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: #60A5FA;
+    flex-shrink: 0;
+  }
+  .turno-banner-route {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+  .turno-leg-iata {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+  .turno-leg-arrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    color: #60A5FA;
+    opacity: 0.6;
+    padding: 0 2px;
+  }
+  .turno-banner-pills {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+    align-items: center;
+  }
+  .turno-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 7px;
+    background: rgba(59,130,246,0.10);
+    border: 1px solid rgba(59,130,246,0.18);
+  }
+  .turno-pill-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 800;
+    color: #93C5FD;
+    line-height: 1.15;
+  }
+  .turno-pill-lbl {
+    font-family: 'Inter', sans-serif;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #60A5FA;
+    opacity: 0.75;
+  }
+  @media (prefers-color-scheme: dark) {
+    .turno-banner { background: rgba(59,130,246,0.09); border-color: rgba(59,130,246,0.26); }
+  }
+  @media (max-width: 600px) {
+    .turno-leg-iata { font-size: 11px; }
+    .turno-pill-val { font-size: 10px; }
+    .turno-pill { padding: 2px 6px; }
+  }
+
+  .day-group { margin-bottom: 20px; animation: fadeUp 0.4s ease both; flex-direction: row; align-items: flex-start; gap: 10px; }
 
   .cfd-iata-cont {
     font-size: 14px !important;
@@ -452,60 +718,57 @@
   .turno-wrap.turno-end::before {
     display: none;
   }
-  .day-label {
+  /* ── DAY CARD sidebar ── */
+  .day-group {
     display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .day-label {
+    flex-shrink: 0;
+    width: 52px;
+    min-height: 64px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0;
-    margin-bottom: 8px;
-    padding: 0;
+    justify-content: center;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 6px;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: var(--header-h, 120px);
+    align-self: flex-start;
   }
   .day-label-num {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 36px;
+    font-size: 26px;
     font-weight: 800;
-    color: #0F172A;
+    color: var(--text-primary);
     line-height: 1;
-    min-width: 54px;
     letter-spacing: -1px;
-  }
-  .day-label-mid {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 1px;
-    flex: 1;
-  }
-  .day-label-month {
-    font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    color: #475569;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    line-height: 1;
-  }
-  .day-label-year {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
-    color: #94A3B8;
-    letter-spacing: 0.5px;
-    line-height: 1;
-    margin-top: 2px;
   }
   .day-label-wd {
     font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    color: #F1F5F9;
-    letter-spacing: 1.5px;
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: 1px;
     text-transform: uppercase;
-    background: #334155;
-    border: 1px solid #475569;
-    border-radius: 6px;
-    padding: 3px 8px;
     line-height: 1;
   }
+  /* cards column — takes remaining width */
+  .day-cards {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  /* hide old mid/month/year elements */
+  .day-label-mid, .day-label-month, .day-label-year { display: none; }
 
   .card {
     background: var(--surface); border: 1px solid var(--border);
@@ -633,6 +896,7 @@
     align-items: center;
     gap: 1px;
   }
+  .cfd-iata { cursor: pointer; }
   .cfd-iata {
     font-size: 20px;
     font-weight: 800;
@@ -820,10 +1084,11 @@
     box-shadow: 0 2px 8px rgba(50,159,91,0.30);
     display: flex;
     align-items: stretch;
+    height: 64px;
   }
   .off-left {
     background: #267D47;
-    padding: 14px 16px;
+    padding: 10px 16px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -857,10 +1122,11 @@
     box-shadow: 0 2px 8px rgba(234,88,12,0.30);
     display: flex;
     align-items: stretch;
+    height: 64px;
   }
   .sby-left {
     background: #C44A08;
-    padding: 14px 16px;
+    padding: 10px 16px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -889,7 +1155,7 @@
     flex: 1;
     display: flex;
     align-items: center;
-    padding: 14px 18px;
+    padding: 10px 18px;
     border-left: 1px solid rgba(255,255,255,0.15);
   }
   .sby-times {
@@ -1071,7 +1337,7 @@
   }
 
   .scroll-progress {
-    position: fixed; top: 0; left: 0; height: 2px;
+    position: absolute; bottom: 0; left: 0; height: 2px;
     background: var(--accent-flight); z-index: 200; transition: width 0.1s;
   }
   .empty-state {
@@ -1093,102 +1359,168 @@
   }
 
   /* ── MOBILE BASE (≤ 600px) ── */
-  @media (max-width: 600px) {
-    /* Layout */
-    .main { padding: 16px 10px calc(80px + env(safe-area-inset-bottom)); }
+  /* ══════════════════════════════════════════════════════════
+     MOBILE — iPhone notch / Dynamic Island  (≤ 430px)
+     Reference: iPhone 15 Pro  390×844  safe-area-top ~59px
+     Budget:   390 - 2×10 main-pad - 40px day-label - 7px gap = 323px per card
+     cfd-left: 90px → cfd-right netto: 323-90-1 = 232px → airport ~100px each ✓
+     ══════════════════════════════════════════════════════════ */
+  @media (max-width: 430px) {
 
-    /* Header */
-    .header { padding: 10px 14px 8px; padding-top: max(10px, env(safe-area-inset-top)); }
-    .header-inner { gap: 4px; }
-    .header-date { font-size: 15px; letter-spacing: -0.2px; }
-    .header-meta { font-size: 9px; }
-    .header-range { font-size: 10px; }
-    .header-lastupdate { font-size: 9px; }
-    .header-stats { gap: 4px; flex-wrap: wrap; }
-    .stat-pill { padding: 4px 8px; gap: 4px; }
-    .stat-value { font-size: 12px; }
-    .stat-label { font-size: 8px; letter-spacing: 0.5px; }
+    /* ── Layout ───────────────────────────────────────────── */
+    .main {
+      padding: 14px 10px calc(90px + env(safe-area-inset-bottom));
+      padding-left:  max(10px, env(safe-area-inset-left));
+      padding-right: max(10px, env(safe-area-inset-right));
+    }
 
-    /* Filters */
-    .filters { gap: 6px; margin-bottom: 12px; flex-wrap: nowrap; align-items: center; }
-    .filter-chip { padding: 6px 11px; font-size: 11px; white-space: nowrap; }
-    .search-input { padding: 6px 11px; font-size: 12px; }
+    /* ── Header ───────────────────────────────────────────── */
+    .header {
+      padding: 8px 14px 8px;
+      padding-top: max(8px, env(safe-area-inset-top));
+    }
+    .header-inner         { gap: 6px; }
+    .header-date          { font-size: 16px; letter-spacing: -0.3px; }
+    .header-meta          { font-size: 9px; margin-top: 1px; }
+    .header-lastupdate    { font-size: 9px; }
+    .header-stats         { gap: 4px; margin-top: 6px; }
+    .stat-pill            { padding: 4px 9px; }
+    .stat-value           { font-size: 12px; }
+    .stat-label           { font-size: 8px; letter-spacing: 0.3px; }
+    .countdown-label      { font-size: 8px; letter-spacing: 0.8px; }
+    .countdown-value      { font-size: 12px; }
+    #iataToast            { margin-top: 4px; padding: 4px 9px; }
+    #iataToastCode        { font-size: 11px; }
+    #iataToastTz          { font-size: 10px; }
+    #iataToastTime        { font-size: 10px; }
+    .btn-icon             { width: 30px; height: 30px; border-radius: 8px; }
+    .header-actions       { gap: 5px; }
 
-    /* Day label */
-    .day-group { margin-bottom: 14px; }
-    .day-label { min-width: 52px; gap: 3px; }
-    .day-label-num { font-size: 28px; min-width: 40px; }
-    .day-label-month { font-size: 9px; }
-    .day-label-year { font-size: 8px; }
-    .day-label-wd { font-size: 9px; padding: 2px 5px; }
+    /* ── Filter bar ───────────────────────────────────────── */
+    .filters              { gap: 5px; margin-bottom: 10px; }
+    .filter-chip          { padding: 5px 10px; font-size: 11px; border-radius: 8px; }
+    .search-input         { padding: 5px 10px; font-size: 12px; }
 
-    /* Flight / DH card: compress left panel */
-    .cfd-left { width: 108px; padding: 10px 11px; gap: 3px; }
-    .cfd-fltn { font-size: 13px; }
-    .cfd-ac { font-size: 9px; padding: 1px 5px; }
-    .cfd-ci { font-size: 11px; }
-    .cfd-ci-label { font-size: 9px; }
-    .cfd-badges { gap: 3px; }
-    .cfd-dh-badge { font-size: 8px !important; padding: 2px 5px !important; letter-spacing: 0.3px; }
-    .cfd-service-badge { font-size: 8px !important; padding: 2px 5px !important; }
+    /* ── Day group ────────────────────────────────────────── */
+    .day-group            { margin-bottom: 12px; gap: 7px; }
+    #timeline > .day-group { padding: 0; }
 
-    /* Flight card right panel */
-    .cfd-right { padding: 10px 10px; gap: 6px; }
-    .cfd-iata { font-size: 17px; }
-    .cfd-time { font-size: 13px; }
-    .cfd-lbl { font-size: 8px; }
-    .cfd-fh { font-size: 10px; }
-    .cfd-arrow-plane { font-size: 12px; }
-    .cfd-train-label { font-size: 9px !important; }
+    /* ── Date sidebar card ────────────────────────────────── */
+    .day-label     { width: 40px; min-height: 64px; padding: 6px 4px; border-radius: 10px; }
+    .day-label-num { font-size: 20px; letter-spacing: -1px; }
+    .day-label-wd  { font-size: 8px; letter-spacing: 0.5px; }
 
-    /* SBY card */
-    .sby-left { padding: 12px 11px; min-width: 60px; }
-    .sby-code { font-size: 18px; }
-    .sby-label { font-size: 7px; }
-    .sby-right { padding: 12px 12px; }
-    .sby-time { font-size: 20px; }
-    .sby-sep { font-size: 14px; }
-    .sby-utc { font-size: 8px; }
+    /* ── FLIGHT / DH — left panel ─────────────────────────── */
+    .cfd-left           { width: 90px; padding: 10px 9px; gap: 3px; }
+    .cfd-fltn           { font-size: 13px; }
+    .cfd-meta           { gap: 4px; }
+    .cfd-ci             { font-size: 11px; }
+    .cfd-ci-label       { font-size: 8px; }
+    .cfd-ac             { font-size: 9px; padding: 1px 5px; margin-bottom: 1px; }
+    .cfd-badges         { gap: 2px; margin-top: 2px; }
+    .cfd-dh-badge       { font-size: 7px !important; padding: 2px 4px !important; letter-spacing: 0.2px; }
+    .cfd-service-badge  { font-size: 7px !important; padding: 2px 4px !important; }
+    .cfd-badge-ext      { font-size: 7px !important; padding: 1px 4px !important; }
 
-    /* OFF / Training cards */
-    .off-left { padding: 14px 11px; min-width: 60px; }
-    .off-code { font-size: 18px; }
-    .off-label { font-size: 7px; }
-    .trn-left { padding: 12px 11px; min-width: 70px; }
-    .trn-code { font-size: 9px; letter-spacing: 0.8px; }
-    .trn-right { padding: 12px 12px; }
-    .trn-item-name { font-size: 12px; }
-    .trn-item-times { font-size: 11px; }
-    .trn-item-loc { font-size: 10px; }
+    /* ── FLIGHT / DH — right panel ───────────────────────── */
+    /* netto: 323 - 90 - 1(divider) - 16(pad) = 216px          */
+    /* 2 airport + arrow: (216-28)÷2 = 94px each → IATA@15px ✓ */
+    .cfd-right          { padding: 10px 8px; gap: 4px; }
+    .cfd-iata           { font-size: 15px; letter-spacing: 0.2px; }
+    .cfd-time           { font-size: 12px; }
+    .cfd-lbl            { font-size: 7px; letter-spacing: 0.4px; }
+    .cfd-fh             { font-size: 9px; letter-spacing: 0.4px; }
+    .cfd-arrow-plane    { font-size: 11px; }
+    .cfd-train-label    { font-size: 8px !important; letter-spacing: 0.3px; }
+    .cfd-nextday        { font-size: 8px; }
 
-    /* Remarks */
-    .card-remarks { padding: 6px 11px 8px; gap: 4px; }
-    .card-remarks-tag { font-size: 9px; padding: 2px 6px; }
-    .card-remarks-label { font-size: 8px; }
+    /* ── SBY card ─────────────────────────────────────────── */
+    /* height:64px fixed → content area = 64px, center everything */
+    .sby-left           { width: 68px; flex-shrink: 0; padding: 0 10px; }
+    .sby-code           { font-size: 19px; }
+    .sby-label          { font-size: 7px; letter-spacing: 0.8px; }
+    .sby-right          { padding: 0 10px; }
+    .sby-times          { gap: 4px; flex-wrap: nowrap; }
+    .sby-time           { font-size: 17px; letter-spacing: 0.2px; }
+    .sby-sep            { font-size: 12px; }
+    .sby-utc            { font-size: 7px; }
+    .sby-overflow       { font-size: 11px !important; }
 
-    /* FAB */
-    .fab-today { bottom: max(16px, calc(10px + env(safe-area-inset-bottom))); right: max(12px, calc(8px + env(safe-area-inset-right))); padding: 8px 13px 8px 10px; font-size: 12px; gap: 5px; }
+    /* ── OFF / FERIE card ────────────────────────────────── */
+    .off-left           { padding: 0 12px; }
+    .off-code           { font-size: 17px; }
+    .off-label          { font-size: 7px; letter-spacing: 0.8px; }
 
-    /* Upload screen */
-    .upload-screen { padding: 20px 14px 36px; gap: 24px; }
-    .upload-hero { gap: 8px; }
-    .upload-zone { padding: 24px 16px; border-radius: 16px; }
-    .upload-icon { width: 42px; height: 42px; border-radius: 12px; }
+    /* ── TRAINING card ────────────────────────────────────── */
+    /* Stack vertically: label on top full-width, sessions below  */
+    .card-training      { flex-direction: column; height: auto !important; }
+    .trn-left           { width: 100%; padding: 9px 12px 7px;
+                          flex-direction: row; align-items: center;
+                          gap: 8px; border-radius: 0; }
+    .trn-code           { font-size: 10px; letter-spacing: 0.6px; }
+    .trn-sub            { font-size: 9px; }
+    .trn-right          { padding: 7px 12px 10px; border-left: none;
+                          border-top: 1px solid rgba(255,255,255,0.08); gap: 4px; }
+    .trn-item           { flex-direction: row; gap: 8px; align-items: baseline; }
+    .trn-item-name      { font-size: 12px; flex: 1; min-width: 0; }
+    .trn-item-times     { font-size: 11px; white-space: nowrap; flex-shrink: 0; }
+    .trn-item-loc       { font-size: 10px; flex-shrink: 0; }
+    .trn-divider        { margin: 3px 0; }
+
+    /* ── TURNO block header ───────────────────────────────── */
+    .turno-block-header { padding: 8px 10px 8px; }
+    .tba-top-row        { gap: 5px; }
+    .turno-block-label  { font-size: 7px; letter-spacing: 1px; }
+    .turno-block-dates  { font-size: 10px; padding: 2px 5px; }
+    .tba-iata           { font-size: 12px; }
+    .tba-sep            { font-size: 10px; }
+    .tba-row-label      { font-size: 7px; padding: 1px 4px; min-width: 22px; }
+    .tba-pill           { padding: 2px 7px; }
+    .tba-pill-val       { font-size: 11px; }
+    .tba-pill-lbl       { font-size: 6px; }
+    .tba-bottom-row     { margin-top: 5px; }
+    .tba-route-rows     { gap: 3px; }
+    .turno-block-body   { padding: 0 8px; }
+    .turno-block-body > .day-group { padding: 6px 0 0; }
+    .turno-block-body > .day-group:first-child { padding-top: 10px; }
+    .turno-block-body > .day-group:last-child  { padding-bottom: 10px; }
+
+    /* ── Remarks ──────────────────────────────────────────── */
+    .card-remarks       { padding: 5px 10px 7px; gap: 3px; }
+    .card-remarks-tag   { font-size: 9px; padding: 2px 5px; }
+    .card-remarks-label { font-size: 7px; }
+
+    /* ── FAB ──────────────────────────────────────────────── */
+    .fab-today {
+      bottom: max(14px, calc(8px + env(safe-area-inset-bottom)));
+      right:  max(12px, calc(8px + env(safe-area-inset-right)));
+      padding: 8px 12px 8px 10px; font-size: 12px; gap: 5px;
+    }
+
+    /* ── Upload screen ────────────────────────────────────── */
+    .upload-screen { padding: 18px 12px calc(32px + env(safe-area-inset-bottom)); gap: 20px; }
+    .upload-hero   { gap: 8px; }
+    .upload-zone   { padding: 22px 14px; border-radius: 14px; }
+    .upload-icon   { width: 40px; height: 40px; border-radius: 10px; }
   }
 
-  /* ── COMPACT MOBILE (≤ 380px — iPhone SE, older Android) ── */
-  @media (max-width: 380px) {
-    .main { padding: 12px 8px calc(70px + env(safe-area-inset-bottom)); }
-    .cfd-left { width: 96px; padding: 9px 9px; }
-    .cfd-fltn { font-size: 12px; }
-    .cfd-iata { font-size: 15px; }
-    .cfd-time { font-size: 12px; }
-    .cfd-right { padding: 9px 8px; gap: 4px; }
-    .day-label-num { font-size: 24px; min-width: 36px; }
-    .day-label { min-width: 46px; }
-    .sby-time { font-size: 18px; }
-    .stat-pill { padding: 3px 6px; }
-    .stat-value { font-size: 11px; }
+  /* ── COMPACT (≤ 375px — iPhone SE 3rd gen) ────────────── */
+  @media (max-width: 375px) {
+    .main           { padding-left: 8px; padding-right: 8px; }
+    .day-label      { width: 36px; min-height: 60px; }
+    .day-label-num  { font-size: 18px; }
+    .day-group      { gap: 6px; }
+    .cfd-left       { width: 84px; padding: 9px 8px; }
+    .cfd-fltn       { font-size: 12px; }
+    .cfd-iata       { font-size: 14px; }
+    .cfd-time       { font-size: 11px; }
+    .cfd-right      { padding: 9px 6px; gap: 3px; }
+    .sby-left       { width: 62px; }
+    .sby-time       { font-size: 15px; }
+    .stat-pill      { padding: 3px 7px; }
+    .stat-value     { font-size: 11px; }
+    .tba-iata       { font-size: 11px; }
+    .turno-block-dates { font-size: 9px; }
   }
 
   @media (prefers-color-scheme: dark) {
@@ -1206,10 +1538,9 @@
       border-bottom-color: var(--border);
     }
     /* Day label — high contrast on dark background */
-    .day-label-num   { color: #F0F6FC; }
-    .day-label-month { color: #8B949E; }
-    .day-label-year  { color: #484F58; }
-    .day-label-wd    { color: #E6EDF3; background: #21262D; border-color: #30363D; }
+    .day-label-num { color: #F0F6FC; }
+    .day-label-wd  { color: #8B949E; }
+    .day-label { background: #161B22; border-color: #21262D; }
     /* Cards */
     .card { background: var(--surface); border-color: var(--border); }
     /* Turno connector */
@@ -1252,9 +1583,8 @@
 </head>
 <body>
 
+<header class="header" style="position:sticky;top:0;z-index:100;">
 <div class="scroll-progress" id="scrollProgress"></div>
-
-<header class="header">
   <div class="header-inner">
     <div>
       <div class="header-date" id="headerDate">CREW ROSTER</div>
@@ -1263,22 +1593,34 @@
         <span class="countdown-label" id="countdownLabel">PROSSIMO DUTY</span>
         <span class="countdown-value" id="countdownValue">--:--:--:--</span>
       </div>
-      <div class="header-stats" id="headerStats">
-        <div class="stat-pill stat-fh">
-          <span class="stat-value" id="statFH">—</span>
-          <span class="stat-label">Ore Volo</span>
+      <div style="display:flex;flex-direction:column;align-items:flex-start;">
+        <div class="header-stats" id="headerStats">
+          <div class="stat-pill stat-fh">
+            <span class="stat-value" id="statFH">—</span>
+            <span class="stat-label">Ore Volo</span>
+          </div>
+          <div class="stat-pill stat-off">
+            <span class="stat-value" id="statOFF">—</span>
+            <span class="stat-label">Giorni OFF</span>
+          </div>
+          <div class="stat-pill stat-sby">
+            <span class="stat-value" id="statSBY">—</span>
+            <span class="stat-label">Giorni SBY</span>
+          </div>
         </div>
-        <div class="stat-pill stat-off">
-          <span class="stat-value" id="statOFF">—</span>
-          <span class="stat-label">Giorni OFF</span>
-        </div>
-        <div class="stat-pill stat-sby">
-          <span class="stat-value" id="statSBY">—</span>
-          <span class="stat-label">Giorni SBY</span>
+        <div id="iataToast" style="display:none">
+          <span id="iataToastCode"></span>
+          <span id="iataToastTz"></span>
+          <span id="iataToastTime"></span>
         </div>
       </div>
     </div>
     <div class="header-actions">
+      <button class="btn-icon" id="btnExpandAll" title="Espandi/Collassa turni" onclick="toggleAllTurni()" style="display:none">
+        <svg id="expandAllIcon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <polyline points="7 11 12 6 17 11"/><polyline points="7 17 12 12 17 17" opacity=".5"/>
+        </svg>
+      </button>
       <button class="btn-icon" id="iconBtn" title="Icona app personalizzata" onclick="document.getElementById('iconInput').click()" style="position:relative;overflow:hidden;">
         <span id="iconBtnImg" style="display:none;width:22px;height:22px;border-radius:6px;overflow:hidden;flex-shrink:0;">
           <img id="iconPreview" style="width:100%;height:100%;object-fit:cover;display:block;" src="" alt="">
@@ -1359,7 +1701,7 @@ if (typeof pdfjsLib !== 'undefined') {
 // ─────────────────────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────────────────────
-const S = { schedule:[], showOnlyOff:false, search:'', unrecognized:[], crewName:'', rosterRange:'', printDate:'', flightHours:'', dayOff:'', sbYDays:'' };
+const S = { schedule:[], showOnlyOff:false, allExpanded:false, search:'', unrecognized:[], crewName:'', rosterRange:'', printDate:'', flightHours:'', dayOff:'', sbYDays:'' };
 
 // ─────────────────────────────────────────────────────────────
 // UTILS
@@ -1519,6 +1861,7 @@ function parseNeosRoster(text) {
   let openOvernightLeg = null; // { legRef, sourceDayIso }
   let prevRaw = ''; // track previous line for lone "DH" lookahead
   let lastPendingCI = null; // persists after pendingCI is cleared, for lone-DH case
+  let curDayCI = null;      // CI of the day when it was first opened — never overwritten by continuation lines
   let pendingTraining = null; // training sessions that arrived before their date line
   let curDayHasContent = false; // true when the date-line itself contained duty/CI content
 
@@ -1528,7 +1871,7 @@ function parseNeosRoster(text) {
 
   const newDay = iso => {
     flushDay();
-    curDate = iso; pendingCI = null; lastPendingCI = null;
+    curDate = iso; pendingCI = null; lastPendingCI = null; curDayCI = null;
     curDay = { dateIso: iso, weekdayLabel: isoWD(iso), activities: [], remarks: [] };
     curDayHasContent = false;
     // Apply any pending activities that arrived before their date line (pdf.js ordering)
@@ -1569,13 +1912,45 @@ function parseNeosRoster(text) {
       if (isDupDate) {
         // Extract check-in time if present (e.g. "02/02/2026 mo 11:00")
         const ciM = duty.match(/^(\d{1,2}:\d{2})(\s+HTL)?$/);
-        if (ciM) { pendingCI = parseTime(ciM[1]); lastPendingCI = pendingCI; }
+        if (ciM) { pendingCI = parseTime(ciM[1]); lastPendingCI = pendingCI; if (!curDayCI) curDayCI = pendingCI; }
         // It may also be a bare date line with no extra info — just skip
         continue;
       }
 
       // New day
-      newDay(iso);
+      // Guard: if iso < curDate, it means pdf.js Y-order inversion caused curDay
+      // (the "future" day) to receive activities that belong to `iso` (the earlier day).
+      // Heuristic: DH/SBY activities whose latest timestamp < curDay's check-in time
+      // are the misplaced ones; FLIGHT legs with dep≠null (real departures from this day)
+      // stay with curDay.
+      if (curDay && iso < curDate) {
+        // pdf.js Y-order inversion: curDay (the later date) received activities
+        // that belong to iso (the earlier date). Re-partition them.
+        //
+        // Use lastPendingCI (= the check-in of curDay, set when we opened it)
+        // as the boundary. Activities ending before that CI belong to the earlier day.
+        const tMin = t => { if (!t) return Infinity; const [h,m]=t.split(':').map(Number); return h*60+m; };
+        const actLatest = a => {
+          if (a.type === 'DH') return tMin(a.eta || a.etd);
+          if (a.type === 'FLIGHT') {
+            if (a.legs && a.legs.every(l => l.dep === null))
+              return tMin(a.legs[a.legs.length-1].ldgUtc);
+            return Infinity; // real departure stays on curDay
+          }
+          return Infinity;
+        };
+        // Threshold: curDay's opening CI (curDayCI), fallback to lastPendingCI, fallback to midnight
+        const threshMin = tMin(curDayCI) < Infinity ? tMin(curDayCI) : tMin(lastPendingCI) < Infinity ? tMin(lastPendingCI) : 24*60;
+        const misplaced = [], keep = [];
+        for (const a of curDay.activities) {
+          actLatest(a) < threshMin ? misplaced.push(a) : keep.push(a);
+        }
+        curDay.activities = keep;
+        newDay(iso);
+        curDay.activities.push(...misplaced);
+      } else {
+        newDay(iso);
+      }
       // Mark day as having content if the date-line itself carries duty info (time, overnight cont, dots)
       if (/\d{1,2}:\d{2}|>|\.{5,}/.test(duty)) curDayHasContent = true;
 
@@ -1635,7 +2010,7 @@ function parseNeosRoster(text) {
       // Dotted = check-in on same line, possibly followed by overnight arrival
       if (/^\.{5,}/.test(duty)) {
         const ciM = raw.match(/\.{5,}\s+(\d{1,2}:\d{2})/);
-        if (ciM) { pendingCI = parseTime(ciM[1]); lastPendingCI = pendingCI; }
+        if (ciM) { pendingCI = parseTime(ciM[1]); lastPendingCI = pendingCI; curDayCI = pendingCI; }
         // Check if line also contains overnight arrival "  >  ARR  HH:MM  HH.HH"
         const oaM = raw.match(/>\s+([A-Z]{3})\s+(\d{1,2}:\d{2})\s+([\d]{2}[.]\d{2})/);
         if (oaM && openOvernightLeg) {
@@ -1768,15 +2143,22 @@ function parseNeosRoster(text) {
       // prevRaw pattern: "AAA - BBB [FLTN] DEP ARR ETD ETA [remarks]"
       const loneM = prevRaw.match(/([A-Z]{3})\s*[-–]\s*([A-Z]{3})(?:\s+([A-Z]{1,2}\d{2,6}))?\s+([A-Z]{3})\s+([A-Z]{3})\s+(\d{1,2}:\d{2})\s+(\d{1,2}:\d{2})/);
       if (loneM) {
-        curDay.activities.push({
-          type: 'DH', dateIso: curDate,
-          dep: loneM[4], arr: loneM[5],
-          etd: parseTime(loneM[6]), eta: parseTime(loneM[7]),
-          routeLabel: loneM[1] + ' → ' + loneM[2],
-          flightLabel: loneM[3] || null,
-          remarks: loneM[3] ? [loneM[1] + ' - ' + loneM[2] + ' ' + loneM[3]] : undefined,
-          checkInUtc: pendingCI || lastPendingCI || null,
-        });
+        const loneDep = loneM[4], loneArr = loneM[5], loneEtd = parseTime(loneM[6]);
+        // Skip if prevRaw already produced an identical DH (e.g. via dhGalaxy pattern)
+        const alreadyExists = curDay.activities.some(
+          a => a.type === 'DH' && a.dep === loneDep && a.arr === loneArr && a.etd === loneEtd
+        );
+        if (!alreadyExists) {
+          curDay.activities.push({
+            type: 'DH', dateIso: curDate,
+            dep: loneDep, arr: loneArr,
+            etd: loneEtd, eta: parseTime(loneM[7]),
+            routeLabel: loneM[1] + ' → ' + loneM[2],
+            flightLabel: loneM[3] || null,
+            remarks: loneM[3] ? [loneM[1] + ' - ' + loneM[2] + ' ' + loneM[3]] : undefined,
+            checkInUtc: pendingCI || lastPendingCI || null,
+          });
+        }
         prevRaw = raw;
         continue;
       }
@@ -1871,20 +2253,25 @@ function parseCont(raw, day, pendingCI, addLeg, unrecognized, overnightRef, date
       checkInUtc: pendingCI || null,
       dateIso: dateIso || null,
     };
-    // If a named flight number exists in the route, surface it in remarks
     if (dh1[3]) act.remarks = [dh1[1] + ' - ' + dh1[2] + ' ' + dh1[3]];
-    day.activities.push(act); return; }
+    // Deduplicate: skip if identical DH already exists on this day
+    const dupDH = day.activities.find(a => a.type==='DH' && a.dep===act.dep && a.arr===act.arr && a.etd===act.etd);
+    if (!dupDH) day.activities.push(act);
+    return; }
   }
 
   // ─ DH without route label but with DH keyword: "   DH   MXP  LIN  05:00  06:00"
   const dh2 = raw.match(/\bDH\b\s+([A-Z]{3})\s+([A-Z]{3})\s+(\d{1,2}:\d{2})\s+(\d{1,2}:\d{2})/);
   if (dh2) {
-    day.activities.push({
+    const act2 = {
       type:'DH', dep:dh2[1], arr:dh2[2],
       etd:parseTime(dh2[3]), eta:parseTime(dh2[4]),
       checkInUtc: pendingCI || null,
       dateIso: dateIso || null,
-    }); return;
+    };
+    const dupDH2 = day.activities.find(a => a.type==='DH' && a.dep===act2.dep && a.arr===act2.arr && a.etd===act2.etd);
+    if (!dupDH2) day.activities.push(act2);
+    return;
   }
 
   // ─ Galaxy Service / positioning WITHOUT "DH" keyword
@@ -1892,14 +2279,17 @@ function parseCont(raw, day, pendingCI, addLeg, unrecognized, overnightRef, date
   // Pattern: "AAA - BBB  [spaces]  AAA  BBB  HH:MM  HH:MM"
   const dhGalaxy = raw.match(/([A-Z]{3})\s*[-–]\s*([A-Z]{3})\s+([A-Z]{3})\s+([A-Z]{3})\s+(\d{1,2}:\d{2})\s+(\d{1,2}:\d{2})/);
   if (dhGalaxy) {
-    day.activities.push({
+    const actG = {
       type:'DH', dep:dhGalaxy[3], arr:dhGalaxy[4],
       etd:parseTime(dhGalaxy[5]), eta:parseTime(dhGalaxy[6]),
       routeLabel:`${dhGalaxy[1]} → ${dhGalaxy[2]}`,
       service: /Galaxy/i.test(raw) ? 'Galaxy Service' : undefined,
       checkInUtc: pendingCI || null,
       dateIso: dateIso || null,
-    }); return;
+    };
+    const dupG = day.activities.find(a => a.type==='DH' && a.dep===actG.dep && a.arr===actG.arr && a.etd===actG.etd);
+    if (!dupG) day.activities.push(actG);
+    return;
   }
 
   // ─ Regular flight leg: FLTN  DEP  ARR  ETD  ETA  FH
@@ -2021,6 +2411,159 @@ async function extractText(file) {
 // ─────────────────────────────────────────────────────────────
 // FILE HANDLING
 // ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// EXPAND / COLLAPSE ALL TURNI
+// ─────────────────────────────────────────────────────────────
+function toggleAllTurni() {
+  S.allExpanded = !S.allExpanded;
+  document.querySelectorAll('.turno-block').forEach(b => {
+    b.classList.toggle('expanded', S.allExpanded);
+  });
+  // Update icon: chevrons-up when expanded, chevrons-down when collapsed
+  const icon = document.getElementById('expandAllIcon');
+  if (icon) icon.innerHTML = S.allExpanded
+    ? '<polyline points="18 15 12 9 6 15"/>'   // chevron-up
+    : '<polyline points="6 9 12 15 18 9"/>';    // chevron-down
+}
+
+// Show/hide btnExpandAll depending on whether turno blocks exist
+function syncExpandBtn() {
+  const btn = document.getElementById('btnExpandAll');
+  if (!btn) return;
+  const hasTurni = document.querySelectorAll('.turno-block').length > 0;
+  btn.style.display = hasTurni ? '' : 'none';
+  // Reset icon to collapsed state
+  const icon = document.getElementById('expandAllIcon');
+  if (icon) icon.innerHTML = '<polyline points="6 9 12 15 18 9"/>';
+  S.allExpanded = false;
+}
+
+// ─────────────────────────────────────────────────────────────
+// IATA TIMEZONE POPUP
+// ─────────────────────────────────────────────────────────────
+// Airports with UTC offset (standard time, not DST)
+// Italian airports excluded (MXP, FCO, VRN, BGY, PSA, BLQ, NAP, PMO, CTA etc.)
+const IATA_TZ = {
+  // Africa
+  MBA:'UTC+3', NBO:'UTC+3', ADD:'UTC+3', DAR:'UTC+3', JRO:'UTC+3', ZNZ:'UTC+3',
+  MRU:'UTC+4', SEZ:'UTC+4', RUN:'UTC+4', TNR:'UTC+3', CPT:'UTC+2', JNB:'UTC+2',
+  LOS:'UTC+1', ACC:'UTC+0', ABJ:'UTC+0', DKR:'UTC+0', CMN:'UTC+1', TUN:'UTC+1',
+  ALG:'UTC+1', CAI:'UTC+2', HRG:'UTC+2', SSH:'UTC+2', LXR:'UTC+2',
+  NOS:'UTC+3', MHQ:'UTC+3',
+  // Americas
+  JFK:'UTC-5', EWR:'UTC-5', BOS:'UTC-5', MIA:'UTC-5', ORD:'UTC-6', LAX:'UTC-8',
+  SFO:'UTC-8', DFW:'UTC-6', ATL:'UTC-5', SEA:'UTC-8', DEN:'UTC-7', LAS:'UTC-8',
+  YYZ:'UTC-5', YVR:'UTC-8', YUL:'UTC-5', MEX:'UTC-6', CUN:'UTC-6',
+  GRU:'UTC-3', GIG:'UTC-3', EZE:'UTC-3', SCL:'UTC-3', BOG:'UTC-5',
+  LIM:'UTC-5', UIO:'UTC-5', PTY:'UTC-5', SJO:'UTC-6',
+  // Asia
+  DXB:'UTC+4', AUH:'UTC+4', DOH:'UTC+3', BAH:'UTC+3', KWI:'UTC+3',
+  RUH:'UTC+3', JED:'UTC+3', MCT:'UTC+4', TLV:'UTC+2', AMM:'UTC+2',
+  BEY:'UTC+2', BGW:'UTC+3', KHI:'UTC+5', DEL:'UTC+5:30', BOM:'UTC+5:30',
+  MAA:'UTC+5:30', BLR:'UTC+5:30', HYD:'UTC+5:30', CCU:'UTC+5:30',
+  CMB:'UTC+5:30', DAC:'UTC+6', KTM:'UTC+5:45', ISB:'UTC+5', LHE:'UTC+5',
+  KBL:'UTC+4:30', MLE:'UTC+5', BKK:'UTC+7', KUL:'UTC+8', SIN:'UTC+8',
+  CGK:'UTC+7', DPS:'UTC+8', MNL:'UTC+8', HKG:'UTC+8', TPE:'UTC+8',
+  PEK:'UTC+8', PVG:'UTC+8', CAN:'UTC+8', CTU:'UTC+8', NKG:'UTC+8',
+  NRT:'UTC+9', HND:'UTC+9', KIX:'UTC+9', NGO:'UTC+9', FUK:'UTC+9',
+  ICN:'UTC+9', GMP:'UTC+9', VTE:'UTC+7', RGN:'UTC+6:30', SGN:'UTC+7',
+  HAN:'UTC+7', PNH:'UTC+7', ULN:'UTC+8', ALA:'UTC+5', TAS:'UTC+5',
+  // Europe (non-Italy)
+  LHR:'UTC+0', LGW:'UTC+0', MAN:'UTC+0', EDI:'UTC+0', DUB:'UTC+0',
+  CDG:'UTC+1', ORY:'UTC+1', NCE:'UTC+1', LYS:'UTC+1', MRS:'UTC+1',
+  AMS:'UTC+1', BRU:'UTC+1', ZRH:'UTC+1', GVA:'UTC+1', VIE:'UTC+1',
+  SZG:'UTC+1', MUC:'UTC+1', FRA:'UTC+1', BER:'UTC+1', HAM:'UTC+1',
+  DUS:'UTC+1', STR:'UTC+1', NUE:'UTC+1', HAJ:'UTC+1', CGN:'UTC+1',
+  PRG:'UTC+1', BUD:'UTC+1', WAW:'UTC+1', KRK:'UTC+1', WRO:'UTC+1',
+  GDN:'UTC+1', BCN:'UTC+1', MAD:'UTC+1', PMI:'UTC+1', AGP:'UTC+1',
+  SVQ:'UTC+1', BIO:'UTC+1', VLC:'UTC+1', LIS:'UTC+0', OPO:'UTC+0',
+  OSL:'UTC+1', BGO:'UTC+1', CPH:'UTC+1', ARN:'UTC+1', GOT:'UTC+1',
+  HEL:'UTC+2', TLL:'UTC+2', RIX:'UTC+2', VNO:'UTC+2', SVO:'UTC+3',
+  DME:'UTC+3', LED:'UTC+3', KEF:'UTC+0', LPA:'UTC+0', TFS:'UTC+0',
+  FUE:'UTC+0', ACE:'UTC+0', SPC:'UTC+0', ATH:'UTC+2', SKG:'UTC+2',
+  HER:'UTC+2', CFU:'UTC+2', RHO:'UTC+2', KGS:'UTC+2', CHQ:'UTC+2',
+  ZTH:'UTC+2', JMK:'UTC+2', IST:'UTC+3', SAW:'UTC+3', ADB:'UTC+3',
+  ESB:'UTC+3', AYT:'UTC+3', DLM:'UTC+3', BJV:'UTC+3',
+  BEG:'UTC+1', SKP:'UTC+1', TGD:'UTC+1', DBV:'UTC+1', SPU:'UTC+1',
+  ZAG:'UTC+1', LJU:'UTC+1', SOF:'UTC+2', OTP:'UTC+2', KIV:'UTC+2',
+  TBS:'UTC+4', EVN:'UTC+4', GYD:'UTC+4',
+  // Oceania & Pacific
+  SYD:'UTC+10', MEL:'UTC+10', BNE:'UTC+10', PER:'UTC+8', AKL:'UTC+12',
+  NAN:'UTC+12', PPT:'UTC-10',
+  // Atlantic
+  BVC:'UTC-1', SID:'UTC-1', RMF:'UTC+2', MUH:'UTC+2', HRG:'UTC+2',
+  // Middle East
+  WAW:'UTC+1', DSS:'UTC+0',
+};
+
+let _iataToastTimer = null;
+let _iataToastIata = null; // IATA currently shown in toast
+
+function _iataLocalTime(tz) {
+  try {
+    const offsetStr = tz.replace('UTC','').trim();
+    const parts = offsetStr.replace('+','').split(':').map(Number);
+    const sign = offsetStr.startsWith('-') ? -1 : 1;
+    const totalMin = sign * ((Math.abs(parts[0])||0)*60 + (parts[1]||0));
+    const utcMs = Date.now() + new Date().getTimezoneOffset() * 60000;
+    const local = new Date(utcMs + totalMin * 60000);
+    return local.toLocaleTimeString('it-IT', { hour:'2-digit', minute:'2-digit', hour12:false });
+  } catch(e) { return ''; }
+}
+
+function closeIataPopup() {
+  clearTimeout(_iataToastTimer);
+  _iataToastIata = null;
+  const t = document.getElementById('iataToast');
+  if (t) t.style.display = 'none';
+}
+
+function showIataPopup(iataEl, iata) {
+  const tz = IATA_TZ[iata];
+  if (!tz) return;
+
+  // Toggle: same airport tapped again → close
+  if (_iataToastIata === iata) { closeIataPopup(); return; }
+
+  clearTimeout(_iataToastTimer);
+  _iataToastIata = iata;
+
+  const localTime = _iataLocalTime(tz);
+  const t  = document.getElementById('iataToast');
+  const tc = document.getElementById('iataToastCode');
+  const tz2 = document.getElementById('iataToastTz');
+  const tt = document.getElementById('iataToastTime');
+  if (!t) return;
+
+  tc.textContent = iata;
+  tz2.textContent = tz;
+  tt.textContent = localTime ? localTime + ' loc' : '';
+  // Re-trigger animation
+  t.style.display = 'none';
+  requestAnimationFrame(() => { t.style.display = 'flex'; });
+
+  _iataToastTimer = setTimeout(closeIataPopup, 3000);
+}
+
+// ─────────────────────────────────────────────────────────────
+// IATA TAP DELEGATION
+// ─────────────────────────────────────────────────────────────
+let _iataListenerSet = false;
+function setupIataDelegation() {
+  if (_iataListenerSet) return;
+  _iataListenerSet = true;
+  const tl = document.getElementById('timeline');
+  if (!tl) return;
+  tl.addEventListener('click', e => {
+    const iataEl = e.target.closest('.cfd-iata');
+    if (!iataEl) { closeIataPopup(); return; }
+    const iata = iataEl.textContent.trim();
+    if (!iata || iata === '···' || iata.length !== 3) return;
+    e.stopPropagation();
+    showIataPopup(iataEl, iata);
+  });
+}
+
 function handleFileSelect(e) {
   const f = e.target.files[0];
   if (f) processPDF(f);
@@ -2063,6 +2606,163 @@ async function processPDF(file) {
   }
 }
 
+
+// ─────────────────────────────────────────────────────────────
+// TURNO SUMMARY BANNER
+// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// TURNO COLLAPSIBLE BLOCK builder
+// td: { route, dhRoute, totalFH, nLayover, acTypes, startIso, endIso, days[] }
+// ─────────────────────────────────────────────────────────────
+function buildTurnoBlock(td) {
+  const IT_M = ['GEN','FEB','MAR','APR','MAG','GIU','LUG','AGO','SET','OTT','NOV','DIC'];
+  const fmtD = iso => { const [,mo,d] = iso.split('-'); return d+' '+IT_M[+mo-1]; };
+
+  // ── Build route rows from segments in chronological order
+  // Rule: DH and VOL on the SAME day → same row (inline, DH greyed)
+  //       DH on a different day → its own row
+  const segs = td.segments || [];
+
+  // Helper: render a deduplicated IATA chain with mixed styling
+  // items = [{iata, dh}]
+  const chainHtml = items => {
+    const parts = [];
+    let last = null;
+    for (const {iata, dh} of items) {
+      if (!iata || iata === last) continue;
+      const cls = dh ? ' dh' : '';
+      if (parts.length) parts.push(`<span class="tba-sep${cls}">›</span>`);
+      parts.push(`<span class="tba-iata${cls}">${esc(iata)}</span>`);
+      last = iata;
+    }
+    return parts.join('');
+  };
+
+  // Group segments by day, preserving order
+  // dayGroups: [{dayIdx, segs:[]}]  in order of first appearance
+  const dayGroups = [];
+  const dayIdxMap = new Map();
+  for (const s of segs) {
+    if (!dayIdxMap.has(s.dayIdx)) {
+      dayIdxMap.set(s.dayIdx, dayGroups.length);
+      dayGroups.push({ dayIdx: s.dayIdx, segs: [] });
+    }
+    dayGroups[dayIdxMap.get(s.dayIdx)].segs.push(s);
+  }
+
+  // Build rows in chronological order.
+  // Within each day-group: group consecutive same-kind segs into runs.
+  // VOL+DH (or DH+VOL) consecutive within same day → merged on one row.
+  // 'office' segs always get their own row, never merged.
+  const rows = []; // [{kind, dayIdx, items?, volItems?, dhItems?}]
+
+  for (const dg of dayGroups) {
+    // Collect runs within this day
+    const dayRuns = []; // [{kind, items}]
+    let rKind = null, rItems = [];
+    const flushDayRun = () => {
+      if (!rKind) return;
+      dayRuns.push({ kind: rKind, items: rKind === 'office' ? [] : [...rItems] });
+      rKind = null; rItems = [];
+    };
+    for (const s of dg.segs) {
+      const k = s.office ? 'office' : (s.onDuty ? 'vol' : 'dh');
+      if (k !== rKind) flushDayRun();
+      rKind = k;
+      if (k !== 'office') {
+        if (s.from) rItems.push({ iata: s.from, dh: k === 'dh' });
+        if (s.to)   rItems.push({ iata: s.to,   dh: k === 'dh' });
+      }
+    }
+    flushDayRun();
+
+    // Merge adjacent VOL+DH or DH+VOL runs (same day, no office between them)
+    for (let ri = 0; ri < dayRuns.length; ri++) {
+      const r = dayRuns[ri], rn = dayRuns[ri + 1];
+      if (r.kind !== 'office' && rn && rn.kind !== 'office' && r.kind !== rn.kind) {
+        // Two adjacent flight runs of different type → same row
+        const isVolFirst = r.kind === 'vol';
+        rows.push({
+          kind: 'mixed',
+          volFirst: isVolFirst,
+          volItems: isVolFirst ? r.items : rn.items,
+          dhItems:  isVolFirst ? rn.items : r.items,
+          dayIdx: dg.dayIdx,
+        });
+        ri++; // consume rn
+      } else {
+        rows.push({ kind: r.kind, items: r.items, dayIdx: dg.dayIdx });
+      }
+    }
+  }
+
+  const routeBlockHtml =
+    `<div class="tba-route-rows">` +
+    rows.map(row => {
+      if (row.kind === 'office') {
+        return `<div class="tba-route-row">` +
+          `<span class="tba-row-label tba-row-label-office">PRACTICAL TRAINING</span>` +
+        `</div>`;
+      }
+      if (row.kind === 'mixed') {
+        const firstLbl  = row.volFirst ? 'VOL' : 'DH';
+        const firstCls  = row.volFirst ? '' : ' tba-row-label-dh';
+        const firstChain = chainHtml(row.volFirst ? row.volItems : row.dhItems);
+        const secondLbl  = row.volFirst ? 'DH' : 'VOL';
+        const secondCls  = row.volFirst ? ' tba-row-label-dh' : '';
+        const secondChain = chainHtml(row.volFirst ? row.dhItems : row.volItems);
+        return `<div class="tba-route-row">` +
+          `<span class="tba-row-label${firstCls}">${firstLbl}</span>` +
+          `<div class="tba-route-seq">${firstChain}</div>` +
+          `<span class="tba-row-label${secondCls}" style="margin-left:6px">${secondLbl}</span>` +
+          `<div class="tba-route-seq">${secondChain}</div>` +
+        `</div>`;
+      }
+      const lbl    = row.kind === 'vol' ? 'VOL' : 'DH';
+      const lblCls = row.kind === 'dh'  ? ' tba-row-label-dh' : '';
+      return `<div class="tba-route-row">` +
+        `<span class="tba-row-label${lblCls}">${lbl}</span>` +
+        `<div class="tba-route-seq">${chainHtml(row.items)}</div>` +
+      `</div>`;
+    }).join('') +
+    `</div>`;
+
+  // ── Pills: ore volo, layover, actype
+  let pillsHtml =
+    (td.totalFH ? `<div class="tba-pill"><span class="tba-pill-val">${esc(td.totalFH)}</span><span class="tba-pill-lbl">Ore volo</span></div>` : '') +
+    `<div class="tba-pill"><span class="tba-pill-val">${td.nLayover}</span><span class="tba-pill-lbl">Layover</span></div>`;
+  if (td.acTypes.length)
+    pillsHtml += `<div class="tba-pill"><span class="tba-pill-val">${td.acTypes.map(esc).join('/')}</span><span class="tba-pill-lbl">A/C</span></div>`;
+
+  const block = document.createElement('div');
+  block.className = 'turno-block' + (S.allExpanded ? ' expanded' : '');
+  block.dataset.turnoStart = td.startIso;
+
+  const header = document.createElement('div');
+  header.className = 'turno-block-header';
+  header.innerHTML =
+    `<div class="tba-top-row">` +
+      `<span class="turno-block-label">Turno</span>` +
+      `<span class="turno-block-dates">${fmtD(td.startIso)} – ${fmtD(td.endIso)}</span>` +
+      `<div class="turno-block-pills">${pillsHtml}</div>` +
+      `<svg class="turno-block-chevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>` +
+    `</div>` +
+    `<div class="tba-bottom-row">${routeBlockHtml}</div>`;
+  header.addEventListener('click', () => block.classList.toggle('expanded'));
+
+  const body = document.createElement('div');
+  body.className = 'turno-block-body';
+
+  // Append day-groups for each day in this turno
+  for (const dayGroup of td.dayGroups) {
+    body.appendChild(dayGroup);
+  }
+
+  block.appendChild(header);
+  block.appendChild(body);
+  return block;
+}
+
 // ─────────────────────────────────────────────────────────────
 // RENDERING
 // ─────────────────────────────────────────────────────────────
@@ -2101,62 +2801,221 @@ function renderSchedule() {
   startCountdown();
 
   // ── Compute turno spans
-  // A turno is: FLIGHT day → ≥1 LAYOVER days → FLIGHT day
-  // Mark each day with turnoRole: 'start' | 'mid' | 'end' | null
+  // A turno is: FLIGHT/DH day → ≥1 LAYOVER days → FLIGHT/DH day
   const turnoRole = new Map();
+  const turnoData = new Map(); // startIso → summary object
+
+  // Sum blockUtc "HH:MM" strings → "HH:MM"
+  const sumBlock = legs => {
+    let mins = 0;
+    for (const l of legs) {
+      if (!l.blockUtc) continue;
+      const [h, m] = l.blockUtc.split(':').map(Number);
+      if (!isNaN(h)) mins += h * 60 + m;
+    }
+    return mins ? String(Math.floor(mins/60)).padStart(2,'0') + ':' + String(mins%60).padStart(2,'0') : null;
+  };
+
+  const dayTypes = d => new Set(d.activities.map(a => a.type));
+
+  // A FLIGHT day that contains ONLY overnight-arrival legs (dep===null) is a
+  // "continuation day" — it belongs to the previous duty, not a standalone flight day.
+  // Example: 10/10 has leg {dep:null, arr:'NKG'} — the arrival of the 09/10 overnight.
+  const isContinuationOnly = d =>
+    dayTypes(d).has('FLIGHT') &&
+    d.activities.every(a => a.type !== 'FLIGHT' || a.legs.every(l => l.dep === null));
+
+  // Helper: is this day a "duty day" (has FLIGHT or DH, excluding pure continuation arrivals)
+  // NOTE: TRAINING/office days are NOT duty days — they don't trigger turno blocks
+  const isDutyDay = d =>
+    dayTypes(d).has('DH') ||
+    (dayTypes(d).has('FLIGHT') && d.activities.some(a => a.type === 'FLIGHT' && a.legs.some(l => l.dep !== null)));
+
+  // Build turno spans: any contiguous block of duty/layover/continuation days
+  // Algorithm: scan filtered[], group consecutive days that are duty or layover or continuation-only.
+  // Each such group becomes a turno block if it has at least one duty day.
+  const alreadyInTurno = new Set();
+
   for (let i = 0; i < filtered.length; i++) {
-    const types = d => new Set(d.activities.map(a => a.type));
-    if (types(filtered[i]).has('LAYOVER')) {
-      // find start: scan back for last FLIGHT day before this layover block
-      let s = i - 1;
-      while (s >= 0 && types(filtered[s]).has('LAYOVER')) s--;
-      // find end: scan forward for first FLIGHT day after this layover block
-      let e = i + 1;
-      while (e < filtered.length && types(filtered[e]).has('LAYOVER')) e++;
-      // validate: both ends must be FLIGHT or DH days
-      const startHasFlight = s >= 0 && (types(filtered[s]).has('FLIGHT') || types(filtered[s]).has('DH'));
-      const endHasFlight   = e < filtered.length && (types(filtered[e]).has('FLIGHT') || types(filtered[e]).has('DH'));
-      if (startHasFlight && endHasFlight) {
-        turnoRole.set(filtered[s].dateIso, 'start');
-        for (let k = s + 1; k < e; k++) turnoRole.set(filtered[k].dateIso, 'mid');
-        turnoRole.set(filtered[e].dateIso, 'end');
+    if (alreadyInTurno.has(filtered[i].dateIso)) continue;
+
+    const dt = dayTypes(filtered[i]);
+    // Start only on a real duty day (FLIGHT with real dep, or DH)
+    if (!isDutyDay(filtered[i])) continue;
+
+    // Walk forward: expand span across duty days, layovers, and continuation-only days
+    let e = i;
+    while (e + 1 < filtered.length) {
+      const next = filtered[e + 1];
+      const ndt = dayTypes(next);
+      if (ndt.has('LAYOVER') || isDutyDay(next) || isContinuationOnly(next)) {
+        e++;
+      } else {
+        break;
       }
     }
+
+    // The span is filtered[i..e]. Mark roles.
+    // s = first duty day, e_last = last duty/continuation day
+    turnoRole.set(filtered[i].dateIso, 'start');
+    for (let k = i + 1; k < e; k++) turnoRole.set(filtered[k].dateIso, 'mid');
+    if (e > i) turnoRole.set(filtered[e].dateIso, 'end');
+
+    for (let k = i; k <= e; k++) alreadyInTurno.add(filtered[k].dateIso);
+
+    // ── Collect ALL legs across full span [i..e] (including continuation days)
+    const flightLegs = [];
+    for (let k = i; k <= e; k++) {
+      for (const act of filtered[k].activities) {
+        if (act.type === 'FLIGHT' && act.legs) flightLegs.push(...act.legs);
+      }
+    }
+
+    // ── routeParts: sequence [{iata, dh}]
+    // Build ordered list of segments, then clip to [firstOnDuty..lastOnDuty].
+    // Everything before firstOnDuty and after lastOnDuty is greyed as DH.
+    //
+    // Overnight legs: dep=IATA arr='→' on day N; continuation leg dep=null arr=IATA on day N+1.
+    // We pair them: overnight dep becomes from, continuation arr becomes to.
+    // Step 1: collect all continuation arrivals keyed by day index (for lookup)
+    const _contArrs = new Map(); // dayIdx → arr IATA of continuation leg
+    for (let k = i; k <= e; k++) {
+      for (const act of filtered[k].activities) {
+        if (act.type === 'FLIGHT' && act.legs) {
+          for (const l of act.legs) {
+            if (l.dep === null && l.arr && l.arr !== '→' && l.arr !== '—')
+              _contArrs.set(k, l.arr); // e.g. day k has continuation arrival ZNZ
+          }
+        }
+      }
+    }
+    // Step 2: build segments in order — include dayIdx for same-day grouping
+    const _segments = []; // [{from, to, onDuty, dayIdx}]
+    for (let k = i; k <= e; k++) {
+      for (const act of filtered[k].activities) {
+        if (act.type === 'FLIGHT' && act.legs) {
+          for (const l of act.legs) {
+            // Skip degenerate legs (no real IATA dep) and training-derived legs
+            if (!l.dep || l.dep === '→') continue;
+            if (!/^[A-Z]{3}$/.test(l.dep)) continue; // must be a real IATA
+            if (l.arr && l.arr !== '→' && l.arr !== '—') {
+              if (!/^[A-Z]{3}$/.test(l.arr)) continue; // arr must also be real IATA
+              _segments.push({ from: l.dep, to: l.arr, onDuty: true, dayIdx: k });
+            } else if (l.arr === '→') {
+              const contArr = _contArrs.get(k + 1) || null;
+              _segments.push({ from: l.dep, to: contArr, onDuty: true, dayIdx: k });
+            }
+          }
+        }
+        if (act.type === 'DH' && act.dep && act.arr) {
+          _segments.push({ from: act.dep, to: act.arr, onDuty: false, dayIdx: k });
+        }
+        if (act.type === 'TRAINING') {
+          _segments.push({ from: null, to: null, onDuty: false, office: true, dayIdx: k });
+        }
+      }
+    }
+    // Find first and last on-duty segment index
+    const _firstOD = _segments.findIndex(s => s.onDuty);
+    const _lastOD  = _segments.reduce((acc,s,idx) => s.onDuty ? idx : acc, -1);
+    // Build routeParts: segments outside [_firstOD.._lastOD] are DH (grey)
+    const routeParts = [];
+    const _pushRP = (iata, dh) => {
+      if (!iata) return;
+      if (routeParts.length && routeParts[routeParts.length-1].iata === iata) return;
+      routeParts.push({ iata, dh });
+    };
+    _segments.forEach((s, idx) => {
+      const grey = _firstOD < 0 || idx < _firstOD || idx > _lastOD;
+      _pushRP(s.from, grey);
+      if (s.to) _pushRP(s.to, grey);
+    });
+
+    // ── Flight hours: completed legs only (arr !== '→')
+    const completedLegs = flightLegs.filter(l => l.arr && l.arr !== '→');
+    const totalFH = sumBlock(completedLegs);
+
+    // ── Aircraft types from all flight legs
+    const acTypes = [...new Set(flightLegs.map(l => l.acType).filter(Boolean))];
+
+    // ── Layover count
+    const nLayover = filtered.slice(i + 1, e).filter(d => dayTypes(d).has('LAYOVER')).length;
+
+    // ── End date: last day in span
+    const endIso = filtered[e].dateIso;
+
+    // DEBUG — rimuovere dopo verifica
+    if (filtered[i].dateIso === '2026-03-12' || filtered[i].dateIso === '2026-03-09') {
+      console.log('TURNO', filtered[i].dateIso, '→', endIso, '_segments:', JSON.stringify(_segments));
+    }
+    turnoData.set(filtered[i].dateIso, {
+      routeParts, segments: _segments, totalFH, acTypes, nLayover,
+      startIso: filtered[i].dateIso, endIso,
+      span: [i, e],
+    });
   }
 
+  // ── Build day-groups, then wrap turno spans in collapsible blocks
+  // Pass 1: build all day-groups keyed by dateIso
+  const dayGroupMap = new Map(); // dateIso → DOM element
   for (const day of filtered) {
     const g = document.createElement('div');
     const _role = turnoRole.get(day.dateIso);
     g.className = 'day-group' + (_role ? ' turno-wrap turno-' + _role : '');
     g.dataset.date = day.dateIso;
     const _p = isoParts(day.dateIso);
+    const _WD_IT = {SUN:'Dom',MON:'Lun',TUE:'Mar',WED:'Mer',THU:'Gio',FRI:'Ven',SAT:'Sab',
+                     mo:'Lun',tu:'Mar',we:'Mer',th:'Gio',fr:'Ven',sa:'Sab',su:'Dom'};
+    const _wdIt = _WD_IT[day.weekdayLabel] || day.weekdayLabel;
     g.innerHTML = `
       <div class="day-label">
         <span class="day-label-num">${_p.d}</span>
-        <div class="day-label-mid">
-          <span class="day-label-month">${_p.mo}</span>
-          <span class="day-label-year">${_p.y}</span>
-        </div>
-        <span class="day-label-wd">${day.weekdayLabel}</span>
+        <span class="day-label-wd">${_wdIt}</span>
       </div>
+      <div class="day-cards"></div>
     `;
+    const _cardsEl = g.querySelector('.day-cards');
     for (const act of day.activities) {
       const el = renderAct(act);
-      if (el) g.appendChild(el);
+      if (el) _cardsEl.appendChild(el);
     }
-    tl.appendChild(g);
+    dayGroupMap.set(day.dateIso, g);
+  }
+
+  // Pass 2: emit into timeline — turno days wrapped in blocks, others direct
+  const emittedDates = new Set();
+  for (const day of filtered) {
+    if (emittedDates.has(day.dateIso)) continue;
+    const _role = turnoRole.get(day.dateIso);
+
+    if (_role === 'start' && turnoData.has(day.dateIso)) {
+      const td = turnoData.get(day.dateIso);
+      const [s, e] = td.span;
+      // Collect all day-groups for this turno span in order
+      const dayGroups = [];
+      for (let k = s; k <= e; k++) {
+        const iso = filtered[k].dateIso;
+        if (dayGroupMap.has(iso)) {
+          dayGroups.push(dayGroupMap.get(iso));
+          emittedDates.add(iso);
+        }
+      }
+      td.dayGroups = dayGroups;
+      tl.appendChild(buildTurnoBlock(td));
+    } else {
+      tl.appendChild(dayGroupMap.get(day.dateIso));
+      emittedDates.add(day.dateIso);
+    }
   }
 
   // ── Inject DH arrival cards into the following day-group
   // A DH that crosses midnight has its departure on day N and arrival on day N+1.
   // The parser doesn't split DH legs, so we synthesise the arrival card here.
-  const allGroups = [...tl.querySelectorAll('.day-group[data-date]')];
-  for (let gi = 0; gi < allGroups.length - 1; gi++) {
-    const dayObj = filtered[gi];
-    if (!dayObj) continue;
+  // Use dayGroupMap (iso→el) for reliable lookup regardless of turno-block nesting.
+  for (let fi = 0; fi < filtered.length - 1; fi++) {
+    const dayObj = filtered[fi];
     for (const act of dayObj.activities) {
       if (act.type === 'DH' && act.dep && act.arr && nightOffset(act.etd, act.eta) > 0) {
-        // Build arrival-only ghost activity
         const ghost = {
           type: 'DH',
           dep: null, arr: act.arr,
@@ -2166,14 +3025,15 @@ function renderSchedule() {
           trainLabel: act.trainLabel || null,
           service: act.service || null,
           remarks: act.remarks || null,
-          dateIso: filtered[gi + 1].dateIso,
+          dateIso: filtered[fi + 1].dateIso,
         };
         const ghostEl = renderDH(ghost);
-        const nextGroup = allGroups[gi + 1];
-        // Insert before the first card (after the day-label)
-        const firstCard = nextGroup.querySelector('.card-dh-dark, .card-flight-dark, .card, .card-off-dark');
-        if (firstCard) nextGroup.insertBefore(ghostEl, firstCard);
-        else nextGroup.appendChild(ghostEl);
+        const nextGroup = dayGroupMap.get(filtered[fi + 1].dateIso);
+        if (!nextGroup) continue;
+        const cardsCol = nextGroup.querySelector('.day-cards') || nextGroup;
+        const firstCard = cardsCol.querySelector('.card-dh-dark, .card-flight-dark, .card, .card-off-dark');
+        if (firstCard) cardsCol.insertBefore(ghostEl, firstCard);
+        else cardsCol.appendChild(ghostEl);
       }
     }
   }
@@ -2329,16 +3189,15 @@ function renderOffR(act) {
 
 // ── FERIE
 function renderHol(act) {
-  const c=document.createElement('div'); c.className='card card-hol';
-  c.innerHTML=`
-    <div class="card-bar bar-hol"></div>
-    <div class="card-body" style="display:flex;align-items:center;gap:14px;padding:14px 16px">
-      <span style="font-size:28px">🌴</span>
-      <div>
-        <div style="font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#059669;line-height:1">FERIE</div>
-        <div style="font-size:10px;font-weight:600;letter-spacing:1px;color:#6EE7B7;margin-top:2px">HOLIDAYS</div>
-      </div>
-    </div>`;
+  const c = document.createElement('div');
+  c.className = 'card-off-dark';
+  c.style.background = '#059669';
+  c.style.boxShadow  = '0 2px 8px rgba(5,150,105,0.30)';
+  c.innerHTML =
+    '<div class="off-left" style="background:#047857">' +
+      '<div class="off-code" style="font-size:20px">🌴 FERIE</div>' +
+      '<div class="off-label">HOLIDAYS</div>' +
+    '</div>';
   const r = remarksHtml(act);
   if (r) c.insertAdjacentHTML('beforeend', r);
   return c;
@@ -2589,6 +3448,8 @@ function showTimeline() {
   document.getElementById('timeline').insertAdjacentElement('beforebegin',fil);
 
   renderSchedule();
+  syncExpandBtn();
+  setupIataDelegation();
   scrollToToday(false);
 }
 
@@ -2641,7 +3502,7 @@ function scrollToToday(animated) {
 function toggleOnlyOff() {
   S.showOnlyOff = !S.showOnlyOff;
   document.getElementById('offChip')?.classList.toggle('active', S.showOnlyOff);
-  if (S.schedule.length) renderSchedule();
+  if (S.schedule.length) { renderSchedule(); syncExpandBtn(); setupIataDelegation(); }
 }
 function handleIconSelect(e) {
   const file = e.target.files[0];
@@ -2912,34 +3773,30 @@ function applyIcons(dataUrl) {
   } catch(e) { applyIcons(null); }
 })();
 
-// ── Service Worker (offline cache)
+// ── Keep --header-h CSS variable in sync with actual header height
+// so .day-label sticky top is always correct (especially on mobile after
+// stats/toast appear and the header grows)
+(function() {
+  const hdr = document.querySelector('.header');
+  if (!hdr) return;
+  const update = () => {
+    document.documentElement.style.setProperty('--header-h', hdr.offsetHeight + 4 + 'px');
+  };
+  update();
+  if (window.ResizeObserver) {
+    new ResizeObserver(update).observe(hdr);
+  } else {
+    window.addEventListener('resize', update);
+  }
+})();
+
+// ── Service Worker registration
+// Requires sw.js in the same directory as index.html on GitHub Pages
 if ('serviceWorker' in navigator) {
-  const swCode = `
-const CACHE = 'crewroster-v1';
-const ASSETS = [
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap'
-];
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS).catch(()=>{})));
-  self.skipWaiting();
-});
-self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys =>
-    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-  ));
-  self.clients.claim();
-});
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request).catch(() => new Response('', {status: 503})))
-  );
-});
-`;
-  const blob = new Blob([swCode], { type: 'application/javascript' });
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl, { scope: '/' }).catch(() => {});
+  // Derive sw.js URL relative to this page
+  const swPath = location.pathname.replace(/\/[^\/]*$/, '/') + 'sw.js';
+  navigator.serviceWorker.register(swPath, { scope: location.pathname.replace(/\/[^\/]*$/, '/') })
+    .catch(() => {});
 }
 </script>
 </body>
