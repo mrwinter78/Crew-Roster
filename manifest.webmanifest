@@ -2,7 +2,7 @@
   "name": "CrewRoster",
   "short_name": "CrewRoster",
   "description": "PWA per consultare roster equipaggi e statistiche anche offline.",
-  "start_url": "./CrewRoster-v4_8_9-stable-fix-v2.html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0F172A",

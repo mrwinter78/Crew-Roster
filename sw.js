@@ -1,9 +1,10 @@
-const CACHE_NAME = 'crewraster-v4-8-9-offline-v1';
+const CACHE_NAME = 'crewraster-v4-8-9-offline-v2';
 const APP_SHELL = [
   './',
-  './CrewRoster-v4_8_9-stable-fix-v2.html',
+  './index.html',
   './manifest.webmanifest',
   './offline.html',
+  './404.html',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',
@@ -37,7 +38,7 @@ self.addEventListener('fetch', event => {
           caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
           return res;
         })
-        .catch(async () => (await caches.match(req)) || caches.match('./CrewRoster-v4_8_9-stable-fix-v2.html') || caches.match('./offline.html'))
+        .catch(async () => (await caches.match(req)) || caches.match('./index.html') || caches.match('./offline.html'))
     );
     return;
   }
