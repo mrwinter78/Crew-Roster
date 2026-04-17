@@ -35,7 +35,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>CrewRoster v4.8.9</title>
-<link rel="manifest" href="./manifest.webmanifest">
 
 <!-- PWA: complete meta set -->
 <!-- iOS Safari -->
@@ -63,9 +62,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
 <!-- PWA startup: preload pdf.js to warm CDN connection; defer parse until after first paint -->
-<link rel="preload" href="./vendor/pdf.min.js" as="script" crossorigin="anonymous">
-<link rel="preload" href="./vendor/pdf.worker.min.js" as="script" crossorigin="anonymous">
-<script src="./vendor/pdf.min.js" defer></script>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" as="script" crossorigin="anonymous">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js" as="script" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
@@ -8727,7 +8726,7 @@ if (typeof pdfjsLib !== 'undefined') {
   // Try to use the worker; fall back to main thread if unavailable
   try {
     pdfjsLib.GlobalWorkerOptions.workerSrc =
-      './vendor/pdf.worker.min.js';
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   } catch(e) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '';
   }
@@ -13589,12 +13588,5 @@ function toggleChangelog() {
 
   </div><!-- /disclaimerBox -->
 </div><!-- /disclaimerOverlay -->
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(console.error);
-  });
-}
-</script>
 </body>
 </html>
